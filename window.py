@@ -9,6 +9,7 @@ FONT = "Roboto"
 
 class PomodoroTimerWindow:
     def __init__(self):
+        self.timer_is_on = False
 
         self.window = Tk()
         self.window.title("Pomodoro Timer ")
@@ -38,17 +39,18 @@ class PomodoroTimerWindow:
         # Minutes entry
         self.seconds = Entry(master=self.tomato_canvas, width=2, borderwidth=0, fg="#FFFFFF", bg="#F26849",
                              font=(FONT, 30, "bold"))
-        self.seconds.insert(END, string="20")
+        self.seconds.insert(END, string="10")
         self.seconds.place(relx=0.66, rely=0.57, anchor=CENTER)
 
         # Next track icon
         self.next_track_icon = PhotoImage(file="assets/images/next_track_icon.png")
         self.next_track_icon = self.next_track_icon.subsample(4, 4)
-        self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0)
+        self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0, command=self.skip_button)
         self.next_track_icon_button.place(relx=0.85, rely=0.51, anchor=CENTER)
 
         # Start_pauza button
-        self.start_button = Button(text=self.button_text, font=(FONT, 20, "bold"),
+
+        self.start_button = Button(text="Start", font=(FONT, 20, "bold"),
                                    command=self.start_button)
         self.start_button.place(relx=0.5, rely=0.85, anchor=CENTER)
 
@@ -62,12 +64,29 @@ class PomodoroTimerWindow:
         pygame.mixer.music.load(sound_path)
         pygame.mixer.music.play()
 
-
     def start_button(self):
-        self.play_sound("assets/sounds/click.mp3")
-        self.if_timer_on()  # Aktualizuj tekst przycisku na podstawie stanu timera
-        countdown = Countdown(self.window, self.minutes, self.seconds, self.timer_is_on)
-        countdown.timer()
+        if self.timer_is_on:
+            self.timer_is_on = False
+            self.play_sound("assets/sounds/break.mp3")
+            self.start_button.configure(text="Start")
+        else:
+            self.timer_is_on = True
+            self.start_button.configure(text="Pauza")
+            self.play_sound("assets/sounds/click.mp3")
+            countdown = Countdown(self.window, self.minutes, self.seconds, self.timer_finished)
+            countdown.timer()
+
+    def timer_finished(self):
+        self.timer_is_on = False
+
+
+    def skip_button(self):
+        self.timer_is_on = False  # Ustawia timer_is_on na False
+        self.minutes.delete(0, END)  # Usuwa aktualną wartość z pola minut
+        self.minutes.insert(END, "00")  # Ustawia minutki na 00
+        self.seconds.delete(0, END)  # Usuwa aktualną wartość z pola sekund
+        self.seconds.insert(END, "00")  # Ustawia sekundy na 00
+
 
     def run(self):
         self.window.mainloop()
