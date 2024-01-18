@@ -3,7 +3,7 @@ from tkinter import *
 
 
 class Countdown:
-    def __init__(self, window, minutes_entry, seconds_entry, callback):
+    def __init__(self, window, minutes_entry, seconds_entry, callback, pauza):
         self.window = window
         self.minutes_entry = minutes_entry
         self.seconds_entry = seconds_entry
@@ -12,16 +12,23 @@ class Countdown:
         self.seconds = int(self.seconds_entry.get())
 
         self.callback = callback
+        self.pauza = pauza
+
+    def set_time(self, minutes, seconds):
+        self.minutes = minutes
+        self.seconds = seconds
 
     def timer(self):
-        self.time()
+        if not self.pauza:
+            self.time()
 
         # Sprawdź, czy mamy jeszcze co odliczać
-        if self.seconds > 0 or self.minutes > 0:
-            self.window.after(1000, self.timer)
+            if self.seconds > 0 or self.minutes > 0:
+                self.window.after(1000, self.timer)
+            else:
+                self.callback()
         else:
-            self.callback()
-
+            return
 
     def time(self):
         if self.seconds > 0:

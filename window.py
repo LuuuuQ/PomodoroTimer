@@ -10,6 +10,8 @@ FONT = "Roboto"
 class PomodoroTimerWindow:
     def __init__(self):
         self.timer_is_on = False
+        self.pauza = False
+
 
         self.window = Tk()
         self.window.title("Pomodoro Timer ")
@@ -45,7 +47,8 @@ class PomodoroTimerWindow:
         # Next track icon
         self.next_track_icon = PhotoImage(file="assets/images/next_track_icon.png")
         self.next_track_icon = self.next_track_icon.subsample(4, 4)
-        self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0, command=self.skip_button)
+        self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0,
+                                             command=self.timer_finished)
         self.next_track_icon_button.place(relx=0.85, rely=0.51, anchor=CENTER)
 
         # Start_pauza button
@@ -54,10 +57,10 @@ class PomodoroTimerWindow:
                                    command=self.start_button)
         self.start_button.place(relx=0.5, rely=0.85, anchor=CENTER)
 
-
-
         # Initialize pygame mixer
         pygame.mixer.init()
+
+        self.countdown = Countdown(self.window, self.minutes, self.seconds, self.timer_finished, self.pauza)
 
     @staticmethod
     def play_sound(sound_path):
@@ -67,25 +70,29 @@ class PomodoroTimerWindow:
     def start_button(self):
         if self.timer_is_on:
             self.timer_is_on = False
+            self.pauza = True
+            self.countdown.pauza = self.pauza
             self.play_sound("assets/sounds/break.mp3")
             self.start_button.configure(text="Start")
+
         else:
+            self.pauza = False
             self.timer_is_on = True
+            self.countdown.pauza = self.pauza
             self.start_button.configure(text="Pauza")
+            self.countdown.set_time(int(self.minutes.get()), int(self.seconds.get()))
             self.play_sound("assets/sounds/click.mp3")
-            countdown = Countdown(self.window, self.minutes, self.seconds, self.timer_finished)
-            countdown.timer()
+            self.countdown.timer()
 
     def timer_finished(self):
         self.timer_is_on = False
+        self.play_sound("assets/sounds/timer_stop.mp3")
+        self.start_button.configure(text="Start")
+        self.pauza = False
+        self.countdown.pauza = self.pauza
 
 
-    def skip_button(self):
-        self.timer_is_on = False  # Ustawia timer_is_on na False
-        self.minutes.delete(0, END)  # Usuwa aktualną wartość z pola minut
-        self.minutes.insert(END, "00")  # Ustawia minutki na 00
-        self.seconds.delete(0, END)  # Usuwa aktualną wartość z pola sekund
-        self.seconds.insert(END, "00")  # Ustawia sekundy na 00
+
 
 
     def run(self):
