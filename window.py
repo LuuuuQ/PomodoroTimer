@@ -149,14 +149,14 @@ class PomodoroTimerWindow:
         self.checkmark_labels.append(label)
 
     def work_break_manager(self):
-        if len(self.checkmark_labels) % 2 == 0 and not self.timer_is_on and not self.pauza:
+        if len(self.checkmark_labels) % 2 == 0:
             self.work_break_label.config(text="Work")
-            # Ustaw wartości w polach Entry
-            self.minutes.delete(0, END)
-            self.minutes.insert(END, str(self.starting_work_minutes).zfill(2))
 
-            self.seconds.delete(0, END)
-            self.seconds.insert(END, str(self.starting_work_seconds).zfill(2))
+            if len(self.checkmark_labels) % 2 == 0 and not self.timer_is_on and not self.pauza:
+                self.minutes.delete(0, END)
+                self.minutes.insert(END, str(self.starting_work_minutes).zfill(2))
+                self.seconds.delete(0, END)
+                self.seconds.insert(END, str(self.starting_work_seconds).zfill(2))
 
         elif len(self.checkmark_labels) == 7 and not self.timer_is_on and not self.pauza:
             self.work_break_label.config(text="Long Break")

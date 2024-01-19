@@ -5,7 +5,7 @@ from tkinter import *
 class Countdown:
     def __init__(self, window, minutes_entry, seconds_entry, callback, pauza):
 
-        self.timer_id = None
+
         self.window_timer = None
         self.window = window
         self.minutes_entry = minutes_entry

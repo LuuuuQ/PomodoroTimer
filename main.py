@@ -1,4 +1,3 @@
-from tkinter import *
 from window import PomodoroTimerWindow
 
 
