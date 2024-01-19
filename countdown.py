@@ -22,6 +22,11 @@ class Countdown:
         self.minutes = minutes
         self.seconds = seconds
 
+    def update_timer_time(self, minutes=0, seconds=0):
+        self.window.after_cancel(self.window_timer)  # Anuluj poprzednie zdarzenie after
+        self.window_timer = self.window.after(10, self.timer)  # Ustaw nowe zdarzenie after po 10 milisekundach
+        self.time()  # Aktualizuj czas natychmiast
+
     def timer(self):
         if not self.pauza:
             self.time()
