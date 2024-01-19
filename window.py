@@ -6,7 +6,6 @@ rely = 0.23
 FONT = "Roboto"
 
 
-
 class PomodoroTimerWindow:
     def __init__(self):
         self.timer_is_on = False
@@ -18,7 +17,7 @@ class PomodoroTimerWindow:
         self.window.minsize(width=500, height=450)
 
         # Work/Break label
-        self.work_break_label = Label(text="Work/Break", fg="#000000", font=(FONT, 30, "bold"))
+        self.work_break_label = Label(text="Choose your timer", fg="#000000", font=(FONT, 30, "bold"))
         self.work_break_label.place(relx=0.5, rely=0.07, anchor=CENTER)
 
         # Tomato image
@@ -44,26 +43,17 @@ class PomodoroTimerWindow:
         self.seconds.insert(END, string="10")
         self.seconds.place(relx=0.66, rely=0.57, anchor=CENTER)
 
-        # Next track icon
-        self.next_track_icon = PhotoImage(file="assets/images/next_track_icon.png")
-        self.next_track_icon = self.next_track_icon.subsample(4, 4)
-        self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0,
-                                             command=self.timer_finished)
-        self.next_track_icon_button.place(relx=0.85, rely=0.51, anchor=CENTER)
-
         # Start_pauza button
-
         self.start_button = Button(text="Start", font=(FONT, 20, "bold"),
                                    command=self.start_button)
         self.start_button.place(relx=0.5, rely=0.85, anchor=CENTER)
 
-        # Initialize pygame mixer
-        pygame.mixer.init()
-
         self.countdown = Countdown(self.window, self.minutes, self.seconds, self.timer_finished, self.pauza)
+
 
     @staticmethod
     def play_sound(sound_path):
+        pygame.mixer.init()
         pygame.mixer.music.load(sound_path)
         pygame.mixer.music.play()
 
@@ -74,6 +64,8 @@ class PomodoroTimerWindow:
             self.countdown.pauza = self.pauza
             self.play_sound("assets/sounds/break.mp3")
             self.start_button.configure(text="Start")
+            self.update_work_break_label()
+            self.next_track_icon_button.destroy()
 
         else:
             self.pauza = False
@@ -83,14 +75,44 @@ class PomodoroTimerWindow:
             self.countdown.set_time(int(self.minutes.get()), int(self.seconds.get()))
             self.play_sound("assets/sounds/click.mp3")
             self.countdown.timer()
+            self.create_next_track_button()
+            self.update_work_break_label()
+
 
     def timer_finished(self):
         self.timer_is_on = False
-        self.play_sound("assets/sounds/timer_stop.mp3")
         self.start_button.configure(text="Start")
         self.pauza = False
         self.countdown.pauza = self.pauza
+        self.work_break_label.config(text="Choose your timer")
 
+
+    def skip_button(self):
+        self.countdown.set_time(0, 0)
+        self.timer_is_on = False
+        self.play_sound("assets/sounds/reset.mp3")
+        self.start_button.configure(text="Start")
+        self.pauza = False
+        self.countdown.pauza = self.pauza
+        self.next_track_icon_button.destroy()
+
+
+    def create_next_track_button(self):
+        if self.timer_is_on:
+            self.next_track_icon = PhotoImage(file="assets/images/next_track_icon.png")
+            self.next_track_icon = self.next_track_icon.subsample(4, 4)
+            self.next_track_icon_button = Button(self.window, image=self.next_track_icon, bd=0,
+                                                 command=self.skip_button)
+            self.next_track_icon_button.place(relx=0.85, rely=0.51, anchor=CENTER)
+
+
+
+    def update_work_break_label(self):
+        if self.timer_is_on:
+            self.work_break_label.config(text="WORK TIME")
+
+        elif not self.timer_is_on:
+            self.work_break_label.config(text="BREAK TIME")
 
 
 
