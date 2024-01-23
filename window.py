@@ -1,6 +1,5 @@
 import customtkinter
 import pygame
-from PIL import Image
 from countdown import Countdown
 
 FONT = "Roboto"
@@ -53,7 +52,8 @@ class PomodoroTimerWindow:
         self.minutes.place(relx=0.30, rely=0.59, anchor=customtkinter.CENTER)
 
         # Colon label
-        self.colon_label = customtkinter.CTkLabel(master=self.frame, text=":", font=(FONT, 30, "bold"))
+        self.colon_label = customtkinter.CTkLabel(master=self.frame, text=":",
+                                                  font=(FONT, 30, "bold"))
         self.colon_label.place(relx=0.50, rely=0.59, anchor=customtkinter.CENTER)
 
         # Minutes entry
@@ -76,10 +76,15 @@ class PomodoroTimerWindow:
         self.start_button.place(relx=0.5, rely=0.85, anchor=customtkinter.CENTER)
 
         # Progress_bar
-        self.progress_bar = customtkinter.CTkProgressBar(master=self.frame, height=300, orientation="vertical",)
+        self.progress_bar = customtkinter.CTkProgressBar(master=self.frame,
+                                                         height=300, orientation="vertical",)
         self.progress_bar.place(relx=0.92, rely=0.5, anchor=customtkinter.CENTER)
 
-        self.countdown = Countdown(self.window, self.minutes, self.seconds, self.progress_bar, self.timer_finished,
+        self.countdown = Countdown(self.window,
+                                   self.minutes,
+                                   self.seconds,
+                                   self.progress_bar,
+                                   self.timer_finished,
                                    self.pauza)
 
     @staticmethod
@@ -101,11 +106,11 @@ class PomodoroTimerWindow:
                 self.timer_is_on = False
                 self.pauza = True
                 self.countdown.pauza = self.pauza
+
                 self.play_sound(SOUND_BREAK)
                 self.start_button.configure(text="Start")
                 self.next_track_icon_button.destroy()
                 self.work_break_manager()
-                self.seconds.configure(takefocus=True)
             else:
                 self.pauza = False
                 self.countdown.set_time(minutes, seconds)
@@ -128,7 +133,8 @@ class PomodoroTimerWindow:
         self.pauza = False
         self.countdown.pauza = self.pauza
         self.work_break_label.configure(text="Choose your timer")
-        self.next_track_icon_button.destroy()
+        if hasattr(self, 'next_track_icon_button'):
+            self.next_track_icon_button.destroy()
         self.play_sound(SOUND_RESET)
         self.work_times += 1
         self.checkmark_manager()
@@ -244,4 +250,5 @@ class PomodoroTimerWindow:
         self.work_break_label.configure(text_color="#6d2c7e")
         self.start_button.configure(fg_color="#6d2c7e", hover_color="#5d1470")
         self.progress_bar.configure(progress_color="#6d2c7e")
+
 

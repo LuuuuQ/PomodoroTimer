@@ -10,8 +10,8 @@ class Countdown:
         self.seconds_entry = seconds_entry
         self.progress_bar = progress_bar
 
-        self.minutes = int(self.minutes_entry.get())
-        self.seconds = int(self.seconds_entry.get())
+        self.minutes = int(self.minutes_entry.get()) if self.minutes_entry.get() else 0
+        self.seconds = int(self.seconds_entry.get()) if self.seconds_entry.get() else 0
 
         self.total_seconds = self.minutes * 60 + self.seconds
         self.remaining_seconds = self.total_seconds
@@ -26,8 +26,9 @@ class Countdown:
         self.remaining_seconds = self.total_seconds
         self.update_progress_bar()
 
-    def update_timer_time(self, minutes=0, seconds=0):
-        self.window.after_cancel(self.window_timer)
+    def update_timer_time(self):
+        if self.window_timer:
+            self.window.after_cancel(self.window_timer)
         self.window_timer = self.window.after(10, self.timer)
         self.time()
 
@@ -66,5 +67,4 @@ class Countdown:
 
         except ZeroDivisionError:
             self.progress_bar.set(100)
-
             pass
