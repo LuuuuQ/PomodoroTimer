@@ -1,9 +1,9 @@
 <h1>Pomodoro Timer Application</h1>
-![python_AZQoDXPCPJ](https://github.com/LuuuuQ/PomodoroTimer/assets/140170604/57805a2c-f112-4a96-8398-6ec7a42ea33f.gif)
-
 
 <h2>Overview</h2>
 <p>The Pomodoro Timer Application is a productivity tool designed to assist users in managing their work and break intervals efficiently, following the Pomodoro Technique. The application boasts a user-friendly graphical interface implemented in Python, leveraging the Tkinter library for creating an interactive and visually appealing user experience.</p>
+
+![pomodorotimer](https://github.com/LuuuuQ/PomodoroTimer/assets/140170604/2d06ec44-e9b2-4290-9342-0c5ad57eb7db)
 
 <h3>Project Structure</h3>
 
