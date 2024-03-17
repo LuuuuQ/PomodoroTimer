@@ -1,5 +1,5 @@
 <h1>Pomodoro Timer Application</h1>
-#### Video Demo:  <a href="https://youtu.be/FD7JgUACKHg">DEMO</a>
+![python_AZQoDXPCPJ](https://github.com/LuuuuQ/PomodoroTimer/assets/140170604/57805a2c-f112-4a96-8398-6ec7a42ea33f.gif)
 
 
 <h2>Overview</h2>
